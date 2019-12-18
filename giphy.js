@@ -5,24 +5,35 @@ document.addEventListener('DOMContentLoaded',()=> {
   let select = document.querySelector('select');
   let input = document.querySelector('#userInput');
   let submit = document.querySelector('#submit');
-  let limit = 10;
-  let search = 'cats'
+
   
   let h1 = document.createElement('h1');
 
-  form.addEventListener('submit',()=> {
-    giphySearch(search,limit);
+  form.addEventListener('submit',(event)=> {
+    event.preventDefault();
+    giphySearch(input.value,select.value)
   })
+
+  
+  const showGif = gifArr => {
+   gifArr.forEach(gif =>{
+     let image = document.createElement('img');
+    image.src =gif.images.downsized.url;
+    content.appendChild(image);
+    
+   })
+
+  }
 
   const giphySearch = async(userInput,userLimit) => {
     try {
+      content.innerHTML = ''
       let res = await axios.get(`https://api.giphy.com/v1/gifs/search?api_key=${key}&q=${userInput}&limit=${userLimit}`);
-      console.log(res)
-    }catch(err){
+      showGif(res.data.data)
+      }catch(err){
+        console.log(err)
+      }
 
-    }
-    //user url that is on slack to create an axios.get req
-    // and console log a response
   }
   
   const populateSelect = ()=> {
